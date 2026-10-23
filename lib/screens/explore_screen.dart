@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 import '../widgets/plant_card.dart';
 import 'plant_details_screen.dart';
+import 'plant_form_screen.dart';
 
 class ExploreScreen extends StatefulWidget {
   const ExploreScreen({super.key});
@@ -15,7 +16,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
 
   String _selectedCategory = 'All';
 
-  final List<Map<String, String>> _plants = [
+  static final List<Map<String, String>> _plants = [
     {
       'name': 'Monstera',
       'category': 'Indoor',
@@ -23,6 +24,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
           'https://images.unsplash.com/photo-1614594975525-e45190c55d0b?w=600',
       'sunlight': 'Indirect light',
       'watering': 'Every 7 days',
+      'notes': '',
     },
     {
       'name': 'Snake Plant',
@@ -31,6 +33,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
           'https://images.unsplash.com/photo-1593482892290-f54927ae1bb6?w=600',
       'sunlight': 'Low to bright',
       'watering': 'Every 2 weeks',
+      'notes': '',
     },
     {
       'name': 'Basil',
@@ -39,6 +42,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
           'https://images.unsplash.com/photo-1618164436241-4473940d1f5c?w=600',
       'sunlight': 'Full sunlight',
       'watering': 'Every 2 days',
+      'notes': '',
     },
     {
       'name': 'Lavender',
@@ -47,6 +51,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
           'https://images.unsplash.com/photo-1499002238440-d264edd596ec?w=600',
       'sunlight': 'Full sunlight',
       'watering': 'Every 3 days',
+      'notes': '',
     },
     {
       'name': 'Aloe Vera',
@@ -55,6 +60,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
           'https://images.unsplash.com/photo-1509423350716-97f9360b4e09?w=600',
       'sunlight': 'Bright indirect',
       'watering': 'Every 2 weeks',
+      'notes': '',
     },
     {
       'name': 'Rosemary',
@@ -63,6 +69,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
           'https://images.unsplash.com/photo-1515586000433-45406d8e6662?w=600',
       'sunlight': 'Full sunlight',
       'watering': 'Every 5 days',
+      'notes': '',
     },
     {
       'name': 'Fern',
@@ -71,6 +78,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
           'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600',
       'sunlight': 'Partial shade',
       'watering': 'Keep soil moist',
+      'notes': '',
     },
     {
       'name': 'Peace Lily',
@@ -79,15 +87,11 @@ class _ExploreScreenState extends State<ExploreScreen> {
           'https://images.unsplash.com/photo-1593691509543-c55fb32e5cee?w=600',
       'sunlight': 'Indirect light',
       'watering': 'Every 5 days',
+      'notes': '',
     },
   ];
 
-  final List<String> _categories = [
-    'All',
-    'Indoor',
-    'Outdoor',
-    'Herbs',
-  ];
+  final List<String> _categories = ['All', 'Indoor', 'Outdoor', 'Herbs'];
 
   @override
   void dispose() {
@@ -98,12 +102,12 @@ class _ExploreScreenState extends State<ExploreScreen> {
   @override
   Widget build(BuildContext context) {
     final filteredPlants = _plants.where((plant) {
-      final matchesSearch = plant['name']!
-          .toLowerCase()
-          .contains(_searchController.text.toLowerCase());
+      final matchesSearch = plant['name']!.toLowerCase().contains(
+        _searchController.text.toLowerCase(),
+      );
 
-      final matchesCategory = _selectedCategory == 'All' ||
-          plant['category'] == _selectedCategory;
+      final matchesCategory =
+          _selectedCategory == 'All' || plant['category'] == _selectedCategory;
 
       return matchesSearch && matchesCategory;
     }).toList();
@@ -142,8 +146,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 scrollDirection: Axis.horizontal,
                 itemCount: _categories.length,
-                separatorBuilder: (_, __) =>
-                    const SizedBox(width: 8),
+                separatorBuilder: (_, __) => const SizedBox(width: 8),
                 itemBuilder: (context, index) {
                   final category = _categories[index];
                   final selected = _selectedCategory == category;
@@ -159,8 +162,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                     selectedColor: AppTheme.primaryGreen,
                     backgroundColor: Colors.white,
                     labelStyle: TextStyle(
-                      color:
-                          selected ? Colors.white : AppTheme.darkGreen,
+                      color: selected ? Colors.white : AppTheme.darkGreen,
                       fontWeight: FontWeight.w600,
                     ),
                     side: BorderSide.none,
@@ -179,20 +181,17 @@ class _ExploreScreenState extends State<ExploreScreen> {
                   final columns = width >= 1000
                       ? 4
                       : width >= 650
-                          ? 3
-                          : 2;
+                      ? 3
+                      : 2;
 
                   if (filteredPlants.isEmpty) {
-                    return const Center(
-                      child: Text('No plants found 🌱'),
-                    );
+                    return const Center(child: Text('No plants found 🌱'));
                   }
 
                   return GridView.builder(
                     padding: const EdgeInsets.all(16),
                     itemCount: filteredPlants.length,
-                    gridDelegate:
-                        SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: columns,
                       crossAxisSpacing: 12,
                       mainAxisSpacing: 12,
@@ -207,20 +206,40 @@ class _ExploreScreenState extends State<ExploreScreen> {
                         imageUrl: plant['image']!,
                         sunlight: plant['sunlight']!,
                         watering: plant['watering']!,
-                        onTap: () {
-                          Navigator.push(
+                        onTap: () async {
+                          final updated = await Navigator.push<PlantFormData>(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  PlantDetailsScreen(
+                              builder: (context) => PlantDetailsScreen(
                                 name: plant['name']!,
                                 category: plant['category']!,
                                 imageUrl: plant['image']!,
                                 sunlight: plant['sunlight']!,
                                 watering: plant['watering']!,
+                                notes: plant['notes'] ?? '',
+                                onPlantUpdated: (updatedPlant) {
+                                  if (!mounted) return;
+                                  setState(() {
+                                    plant['name'] = updatedPlant.name;
+                                    plant['category'] = updatedPlant.category;
+                                    plant['sunlight'] = updatedPlant.sunlight;
+                                    plant['watering'] =
+                                        updatedPlant.wateringFrequency;
+                                    plant['notes'] = updatedPlant.notes;
+                                  });
+                                },
                               ),
                             ),
                           );
+                          if (updated != null && mounted) {
+                            setState(() {
+                              plant['name'] = updated.name;
+                              plant['category'] = updated.category;
+                              plant['sunlight'] = updated.sunlight;
+                              plant['watering'] = updated.wateringFrequency;
+                              plant['notes'] = updated.notes;
+                            });
+                          }
                         },
                       );
                     },

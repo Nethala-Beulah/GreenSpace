@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
+import 'plant_form_screen.dart';
 
-class PlantDetailsScreen extends StatelessWidget {
+class PlantDetailsScreen extends StatefulWidget {
   final String name;
   final String category;
   final String imageUrl;
   final String sunlight;
   final String watering;
+  final String notes;
+  final ValueChanged<PlantFormData>? onPlantUpdated;
 
   const PlantDetailsScreen({
     super.key,
@@ -15,7 +18,30 @@ class PlantDetailsScreen extends StatelessWidget {
     required this.imageUrl,
     required this.sunlight,
     required this.watering,
+    this.notes = '',
+    this.onPlantUpdated,
   });
+
+  @override
+  State<PlantDetailsScreen> createState() => _PlantDetailsScreenState();
+}
+
+class _PlantDetailsScreenState extends State<PlantDetailsScreen> {
+  late PlantFormData _plant;
+
+  @override
+  void initState() {
+    super.initState();
+    _plant = PlantFormData(
+      name: widget.name,
+      category: widget.category,
+      species: widget.name,
+      location: 'Home',
+      wateringFrequency: widget.watering,
+      sunlight: widget.sunlight,
+      notes: widget.notes,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +55,7 @@ class PlantDetailsScreen extends StatelessWidget {
             foregroundColor: AppTheme.darkGreen,
             flexibleSpace: FlexibleSpaceBar(
               background: Image.network(
-                imageUrl,
+                widget.imageUrl,
                 fit: BoxFit.cover,
                 errorBuilder: (context, error, stackTrace) {
                   return Container(
@@ -63,7 +89,7 @@ class PlantDetailsScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Text(
-                          category,
+                          _plant.category,
                           style: const TextStyle(
                             color: AppTheme.primaryGreen,
                             fontWeight: FontWeight.bold,
@@ -72,7 +98,7 @@ class PlantDetailsScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 12),
                       Text(
-                        name,
+                        _plant.name,
                         style: const TextStyle(
                           fontSize: 30,
                           fontWeight: FontWeight.bold,
@@ -82,10 +108,7 @@ class PlantDetailsScreen extends StatelessWidget {
                       const SizedBox(height: 8),
                       const Text(
                         'Bring more greenery into your space!',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.black54,
-                        ),
+                        style: TextStyle(fontSize: 16, color: Colors.black54),
                       ),
                       const SizedBox(height: 24),
 
@@ -102,16 +125,25 @@ class PlantDetailsScreen extends StatelessWidget {
                       _CareCard(
                         icon: Icons.wb_sunny_outlined,
                         title: 'Sunlight',
-                        description: sunlight,
+                        description: _plant.sunlight,
                         color: Colors.orange,
                       ),
                       const SizedBox(height: 12),
                       _CareCard(
                         icon: Icons.water_drop_outlined,
                         title: 'Watering',
-                        description: watering,
+                        description: _plant.wateringFrequency,
                         color: Colors.blue,
                       ),
+                      if (_plant.notes.trim().isNotEmpty) ...[
+                        const SizedBox(height: 12),
+                        _CareCard(
+                          icon: Icons.notes_outlined,
+                          title: 'Notes',
+                          description: _plant.notes,
+                          color: AppTheme.primaryGreen,
+                        ),
+                      ],
                       const SizedBox(height: 24),
 
                       Container(
@@ -126,10 +158,7 @@ class PlantDetailsScreen extends StatelessWidget {
                           children: [
                             Row(
                               children: [
-                                Icon(
-                                  Icons.eco,
-                                  color: AppTheme.primaryGreen,
-                                ),
+                                Icon(Icons.eco, color: AppTheme.primaryGreen),
                                 SizedBox(width: 8),
                                 Text(
                                   'Gardening Tip',
@@ -156,21 +185,44 @@ class PlantDetailsScreen extends StatelessWidget {
                       SizedBox(
                         width: double.infinity,
                         child: FilledButton.icon(
-                          onPressed: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('$name added to your garden!'),
-                              ),
-                            );
-                          },
+                          onPressed: () => Navigator.pushNamed(
+                            context,
+                            '/plant/add',
+                            arguments: _plant,
+                          ),
                           icon: const Icon(Icons.add),
                           label: const Text('Add to My Garden'),
                           style: FilledButton.styleFrom(
                             backgroundColor: AppTheme.primaryGreen,
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 16,
-                            ),
+                            padding: const EdgeInsets.symmetric(vertical: 16),
                           ),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      SizedBox(
+                        width: double.infinity,
+                        child: OutlinedButton.icon(
+                          onPressed: () async {
+                            final result = await Navigator.pushNamed<dynamic>(
+                              context,
+                              '/plant/edit',
+                              arguments: _plant,
+                            );
+                            if (!context.mounted || result is! PlantFormData) {
+                              return;
+                            }
+                            setState(() => _plant = result);
+                            widget.onPlantUpdated?.call(result);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  'Updated ${result.name} details for this session.',
+                                ),
+                              ),
+                            );
+                          },
+                          icon: const Icon(Icons.edit_outlined),
+                          label: const Text('Edit Plant'),
                         ),
                       ),
                     ],

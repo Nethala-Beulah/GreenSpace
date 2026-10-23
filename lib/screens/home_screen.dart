@@ -13,13 +13,22 @@ class HomeScreen extends StatelessWidget {
           children: [
             Icon(Icons.eco, color: AppTheme.primaryGreen, size: 30),
             SizedBox(width: 8),
-            Text(
-              'GreenSpace',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
+            Text('GreenSpace', style: TextStyle(fontWeight: FontWeight.bold)),
           ],
         ),
         actions: [
+          PopupMenuButton<String>(
+            tooltip: 'Garden actions',
+            onSelected: (route) => Navigator.pushNamed(context, route),
+            itemBuilder: (context) => const [
+              PopupMenuItem(value: '/plant/add', child: Text('Add a plant')),
+              PopupMenuItem(
+                value: '/journal/add',
+                child: Text('Add journal entry'),
+              ),
+              PopupMenuItem(value: '/explore', child: Text('Explore plants')),
+            ],
+          ),
           IconButton(
             onPressed: () {},
             tooltip: 'Notifications',
@@ -67,10 +76,7 @@ class HomeScreen extends StatelessWidget {
                     padding: const EdgeInsets.all(24),
                     decoration: BoxDecoration(
                       gradient: const LinearGradient(
-                        colors: [
-                          AppTheme.primaryGreen,
-                          AppTheme.darkGreen,
-                        ],
+                        colors: [AppTheme.primaryGreen, AppTheme.darkGreen],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
@@ -102,8 +108,7 @@ class HomeScreen extends StatelessWidget {
                   // Summary cards
                   LayoutBuilder(
                     builder: (context, cardConstraints) {
-                      final columns =
-                          cardConstraints.maxWidth >= 600 ? 3 : 2;
+                      final columns = cardConstraints.maxWidth >= 600 ? 3 : 2;
 
                       return GridView.count(
                         crossAxisCount: columns,
@@ -137,13 +142,7 @@ class HomeScreen extends StatelessWidget {
 
                   SectionHeader(
                     title: 'Popular Plants',
-                    onActionTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Explore screen coming soon!'),
-                        ),
-                      );
-                    },
+                    onActionTap: () => Navigator.pushNamed(context, '/explore'),
                   ),
                   const SizedBox(height: 12),
 
@@ -265,13 +264,7 @@ class _HeroText extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         FilledButton(
-          onPressed: () {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('We will connect Explore Plants next!'),
-              ),
-            );
-          },
+          onPressed: () => Navigator.pushNamed(context, '/explore'),
           style: FilledButton.styleFrom(
             backgroundColor: Colors.white,
             foregroundColor: AppTheme.darkGreen,
@@ -318,10 +311,7 @@ class _SummaryCard extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             value,
-            style: const TextStyle(
-              color: AppTheme.primaryGreen,
-              fontSize: 13,
-            ),
+            style: const TextStyle(color: AppTheme.primaryGreen, fontSize: 13),
           ),
         ],
       ),
@@ -358,10 +348,7 @@ class _PopularPlant extends StatelessWidget {
           const Spacer(),
           Text(
             name,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 15,
-            ),
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
           ),
           const SizedBox(height: 4),
           Text(
