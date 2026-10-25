@@ -42,4 +42,8 @@ class SectionHeader extends StatelessWidget {
       ],
     );
   }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> origin/main

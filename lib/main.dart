@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'screens/explore_screen.dart';
 import 'screens/main_navigation_shell.dart';
 import 'screens/my_garden_screen.dart';
 import 'screens/plant_scanner_screen.dart';
 import 'services/garden_state.dart';
+=======
+import 'screens/home_screen.dart';
+import 'screens/explore_screen.dart';
+>>>>>>> origin/main
 import 'theme/app_theme.dart';
 
 void main() {
   runApp(const GreenSpaceApp());
 }
 
+<<<<<<< HEAD
 class GreenSpaceApp extends StatefulWidget {
   final GardenState? gardenState;
 
@@ -54,3 +60,21 @@ class _GreenSpaceAppState extends State<GreenSpaceApp> {
     );
   }
 }
+=======
+class GreenSpaceApp extends StatelessWidget {
+  const GreenSpaceApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'GreenSpace',
+      debugShowCheckedModeBanner: false,
+      theme: AppTheme.lightTheme,
+      home: const HomeScreen(),
+      routes: {
+        '/explore': (context) => const ExploreScreen(),
+      },
+    );
+  }
+}
+>>>>>>> origin/main

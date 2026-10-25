@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # GreenSpace — Plant Discovery & Urban Garden Management
 
 GreenSpace is a modern, polished Flutter application designed to help novice and experienced gardeners discover houseplants, understand their precise botanical care requirements, and manage their personal urban garden with watering schedules and care logs.
@@ -137,3 +138,21 @@ The automated test suite in `test/` covers:
 - **`test/screens/explore_screen_test.dart`**: Search query filtering, category chip selection, empty state reset flow.
 - **`test/screens/my_garden_screen_test.dart`**: Garden listing, category filtering, one-tap watering feedback.
 - **`test/screens/plant_scanner_test.dart`**: Specimen selection, simulated recognition scan, confidence output, and safety notice rendering.
+=======
+# greenspace
+
+A new Flutter project.
+
+## Getting Started
+
+This project is a starting point for a Flutter application.
+
+A few resources to get you started if this is your first Flutter project:
+
+- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
+- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+
+For help getting started with Flutter development, view the
+[online documentation](https://docs.flutter.dev/), which offers tutorials,
+samples, guidance on mobile development, and a full API reference.
+>>>>>>> origin/main

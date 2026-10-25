@@ -8,11 +8,14 @@ class PlantCard extends StatelessWidget {
   final String sunlight;
   final String watering;
   final VoidCallback onTap;
+<<<<<<< HEAD
   final String? scientificName;
   final String? difficulty;
   final bool isFavorite;
   final VoidCallback? onFavoriteToggle;
   final bool? isPetSafe;
+=======
+>>>>>>> origin/main
 
   const PlantCard({
     super.key,
@@ -22,11 +25,14 @@ class PlantCard extends StatelessWidget {
     required this.sunlight,
     required this.watering,
     required this.onTap,
+<<<<<<< HEAD
     this.scientificName,
     this.difficulty,
     this.isFavorite = false,
     this.onFavoriteToggle,
     this.isPetSafe,
+=======
+>>>>>>> origin/main
   });
 
   @override
@@ -37,7 +43,10 @@ class PlantCard extends StatelessWidget {
       color: Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
+<<<<<<< HEAD
         side: BorderSide(color: Colors.green.shade50, width: 1),
+=======
+>>>>>>> origin/main
       ),
       child: InkWell(
         onTap: onTap,
@@ -58,7 +67,11 @@ class PlantCard extends StatelessWidget {
                         child: const Center(
                           child: Icon(
                             Icons.local_florist,
+<<<<<<< HEAD
                             size: 48,
+=======
+                            size: 55,
+>>>>>>> origin/main
                             color: AppTheme.primaryGreen,
                           ),
                         ),
@@ -66,6 +79,7 @@ class PlantCard extends StatelessWidget {
                     },
                   ),
                   Positioned(
+<<<<<<< HEAD
                     top: 8,
                     left: 8,
                     child: Container(
@@ -76,6 +90,18 @@ class PlantCard extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: Colors.white.withValues(alpha: 0.92),
                         borderRadius: BorderRadius.circular(16),
+=======
+                    top: 10,
+                    left: 10,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 5,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.92),
+                        borderRadius: BorderRadius.circular(20),
+>>>>>>> origin/main
                       ),
                       child: Text(
                         category,
@@ -87,6 +113,7 @@ class PlantCard extends StatelessWidget {
                       ),
                     ),
                   ),
+<<<<<<< HEAD
                   if (onFavoriteToggle != null)
                     Positioned(
                       top: 4,
@@ -147,12 +174,15 @@ class PlantCard extends StatelessWidget {
                         ),
                       ),
                     ),
+=======
+>>>>>>> origin/main
                 ],
               ),
             ),
             Expanded(
               flex: 5,
               child: Padding(
+<<<<<<< HEAD
                 padding: const EdgeInsets.all(10),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -228,6 +258,57 @@ class PlantCard extends StatelessWidget {
                               ),
                             ),
                           ],
+=======
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      name,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: AppTheme.darkGreen,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.wb_sunny_outlined,
+                          size: 15,
+                          color: Colors.orange,
+                        ),
+                        const SizedBox(width: 5),
+                        Expanded(
+                          child: Text(
+                            sunlight,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(fontSize: 11),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 5),
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.water_drop_outlined,
+                          size: 15,
+                          color: Colors.blue,
+                        ),
+                        const SizedBox(width: 5),
+                        Expanded(
+                          child: Text(
+                            watering,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(fontSize: 11),
+                          ),
+>>>>>>> origin/main
                         ),
                       ],
                     ),
@@ -240,4 +321,8 @@ class PlantCard extends StatelessWidget {
       ),
     );
   }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> origin/main

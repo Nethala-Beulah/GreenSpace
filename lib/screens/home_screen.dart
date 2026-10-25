@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import '../models/plant.dart';
 import '../services/garden_state.dart';
 import '../theme/app_theme.dart';
@@ -7,12 +8,17 @@ import 'explore_screen.dart';
 import 'my_garden_screen.dart';
 import 'plant_details_screen.dart';
 import 'plant_scanner_screen.dart';
+=======
+import '../theme/app_theme.dart';
+import '../widgets/section_header.dart';
+>>>>>>> origin/main
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+<<<<<<< HEAD
     final gardenState = GardenStateScope.maybeOf(context);
 
     final totalPlants = gardenState?.totalPlantsInGarden ?? 0;
@@ -22,17 +28,27 @@ class HomeScreen extends StatelessWidget {
     // Pick 4 popular plants from catalog for recommendations
     final popularPlants = (gardenState?.catalog ?? []).take(5).toList();
 
+=======
+>>>>>>> origin/main
     return Scaffold(
       appBar: AppBar(
         title: const Row(
           children: [
             Icon(Icons.eco, color: AppTheme.primaryGreen, size: 30),
             SizedBox(width: 8),
+<<<<<<< HEAD
             Text('GreenSpace', style: TextStyle(fontWeight: FontWeight.bold)),
+=======
+            Text(
+              'GreenSpace',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+>>>>>>> origin/main
           ],
         ),
         actions: [
           IconButton(
+<<<<<<< HEAD
             onPressed: () {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
@@ -71,6 +87,17 @@ class HomeScreen extends StatelessWidget {
                   );
                 },
               ),
+=======
+            onPressed: () {},
+            tooltip: 'Notifications',
+            icon: const Icon(Icons.notifications_none_rounded),
+          ),
+          const Padding(
+            padding: EdgeInsets.only(right: 16),
+            child: CircleAvatar(
+              backgroundColor: AppTheme.lightGreen,
+              child: Icon(Icons.person, color: AppTheme.primaryGreen),
+>>>>>>> origin/main
             ),
           ),
         ],
@@ -96,23 +123,39 @@ class HomeScreen extends StatelessWidget {
                       color: AppTheme.darkGreen,
                     ),
                   ),
+<<<<<<< HEAD
                   const SizedBox(height: 6),
+=======
+                  const SizedBox(height: 8),
+>>>>>>> origin/main
                   const Text(
                     'Let’s make your space a little greener.',
                     style: TextStyle(fontSize: 15, color: Colors.black54),
                   ),
+<<<<<<< HEAD
                   const SizedBox(height: 20),
+=======
+                  const SizedBox(height: 24),
+>>>>>>> origin/main
 
                   // Hero banner
                   Container(
                     padding: const EdgeInsets.all(24),
                     decoration: BoxDecoration(
                       gradient: const LinearGradient(
+<<<<<<< HEAD
                         colors: [AppTheme.primaryGreen, AppTheme.darkGreen],
+=======
+                        colors: [
+                          AppTheme.primaryGreen,
+                          AppTheme.darkGreen,
+                        ],
+>>>>>>> origin/main
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
                       borderRadius: BorderRadius.circular(24),
+<<<<<<< HEAD
                       boxShadow: [
                         BoxShadow(
                           color: AppTheme.primaryGreen.withValues(alpha: 0.25),
@@ -157,10 +200,28 @@ class HomeScreen extends StatelessWidget {
                                   );
                                 },
                               ),
+=======
+                    ),
+                    child: isWide
+                        ? const Row(
+                            children: [
+                              Expanded(child: _HeroText()),
+                              SizedBox(width: 20),
+                              Text('🪴', style: TextStyle(fontSize: 90)),
+                            ],
+                          )
+                        : const Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('🌿', style: TextStyle(fontSize: 55)),
+                              SizedBox(height: 12),
+                              _HeroText(),
+>>>>>>> origin/main
                             ],
                           ),
                   ),
 
+<<<<<<< HEAD
                   const SizedBox(height: 24),
 
                   // Quick Action Buttons
@@ -234,6 +295,18 @@ class HomeScreen extends StatelessWidget {
                   LayoutBuilder(
                     builder: (context, cardConstraints) {
                       final columns = cardConstraints.maxWidth >= 600 ? 3 : 2;
+=======
+                  const SizedBox(height: 28),
+
+                  const SectionHeader(title: 'Your Garden'),
+                  const SizedBox(height: 12),
+
+                  // Summary cards
+                  LayoutBuilder(
+                    builder: (context, cardConstraints) {
+                      final columns =
+                          cardConstraints.maxWidth >= 600 ? 3 : 2;
+>>>>>>> origin/main
 
                       return GridView.count(
                         crossAxisCount: columns,
@@ -242,6 +315,7 @@ class HomeScreen extends StatelessWidget {
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         childAspectRatio: isWide ? 1.8 : 1.25,
+<<<<<<< HEAD
                         children: [
                           _SummaryCard(
                             icon: Icons.yard_outlined,
@@ -256,10 +330,18 @@ class HomeScreen extends StatelessWidget {
                                 ),
                               );
                             },
+=======
+                        children: const [
+                          _SummaryCard(
+                            icon: Icons.yard_outlined,
+                            title: 'My Plants',
+                            value: '0 plants',
+>>>>>>> origin/main
                           ),
                           _SummaryCard(
                             icon: Icons.water_drop_outlined,
                             title: 'Watering',
+<<<<<<< HEAD
                             value: dueCount > 0
                                 ? '$dueCount due today!'
                                 : 'All hydrated',
@@ -291,6 +373,14 @@ class HomeScreen extends StatelessWidget {
                                 ),
                               );
                             },
+=======
+                            value: '0 reminders',
+                          ),
+                          _SummaryCard(
+                            icon: Icons.favorite_border,
+                            title: 'Plant Care',
+                            value: 'Grow daily',
+>>>>>>> origin/main
                           ),
                         ],
                       );
@@ -301,18 +391,26 @@ class HomeScreen extends StatelessWidget {
 
                   SectionHeader(
                     title: 'Popular Plants',
+<<<<<<< HEAD
                     actionText: 'See all',
                     onActionTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => const ExploreScreen(),
+=======
+                    onActionTap: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Explore screen coming soon!'),
+>>>>>>> origin/main
                         ),
                       );
                     },
                   ),
                   const SizedBox(height: 12),
 
+<<<<<<< HEAD
                   // Popular Plants horizontal carousel with real plant data
                   SizedBox(
                     height: 180,
@@ -340,6 +438,34 @@ class HomeScreen extends StatelessWidget {
                           },
                         );
                       },
+=======
+                  SizedBox(
+                    height: 175,
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      children: const [
+                        _PopularPlant(
+                          emoji: '🌵',
+                          name: 'Aloe Vera',
+                          subtitle: 'Easy care',
+                        ),
+                        _PopularPlant(
+                          emoji: '🌻',
+                          name: 'Sunflower',
+                          subtitle: 'Loves sunlight',
+                        ),
+                        _PopularPlant(
+                          emoji: '🌿',
+                          name: 'Tulsi',
+                          subtitle: 'Aromatic herb',
+                        ),
+                        _PopularPlant(
+                          emoji: '🌹',
+                          name: 'Rose',
+                          subtitle: 'Flowering plant',
+                        ),
+                      ],
+>>>>>>> origin/main
                     ),
                   ),
 
@@ -353,7 +479,10 @@ class HomeScreen extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: AppTheme.lightGreen,
                       borderRadius: BorderRadius.circular(20),
+<<<<<<< HEAD
                       border: Border.all(color: Colors.green.shade100),
+=======
+>>>>>>> origin/main
                     ),
                     child: const Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -369,7 +498,11 @@ class HomeScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
+<<<<<<< HEAD
                                 'Check the soil moisture first!',
+=======
+                                'Every plant is different!',
+>>>>>>> origin/main
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
@@ -378,8 +511,14 @@ class HomeScreen extends StatelessWidget {
                               ),
                               SizedBox(height: 6),
                               Text(
+<<<<<<< HEAD
                                 'Push your finger about 2 inches into the soil. If it feels dry to the touch, your plant is ready for a thorough watering. If damp, wait another day.',
                                 style: TextStyle(height: 1.5, fontSize: 13),
+=======
+                                'Check the soil before watering. Too much '
+                                'water can harm some plants.',
+                                style: TextStyle(height: 1.5),
+>>>>>>> origin/main
                               ),
                             ],
                           ),
@@ -387,7 +526,11 @@ class HomeScreen extends StatelessWidget {
                       ],
                     ),
                   ),
+<<<<<<< HEAD
                   const SizedBox(height: 28),
+=======
+                  const SizedBox(height: 20),
+>>>>>>> origin/main
                 ],
               ),
             ),
@@ -399,9 +542,13 @@ class HomeScreen extends StatelessWidget {
 }
 
 class _HeroText extends StatelessWidget {
+<<<<<<< HEAD
   final VoidCallback onExploreTap;
 
   const _HeroText({required this.onExploreTap});
+=======
+  const _HeroText();
+>>>>>>> origin/main
 
   @override
   Widget build(BuildContext context) {
@@ -434,6 +581,7 @@ class _HeroText extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         FilledButton(
+<<<<<<< HEAD
           onPressed: onExploreTap,
           style: FilledButton.styleFrom(
             backgroundColor: Colors.white,
@@ -441,6 +589,18 @@ class _HeroText extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(14),
             ),
+=======
+          onPressed: () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('We will connect Explore Plants next!'),
+              ),
+            );
+          },
+          style: FilledButton.styleFrom(
+            backgroundColor: Colors.white,
+            foregroundColor: AppTheme.darkGreen,
+>>>>>>> origin/main
           ),
           child: const Text('Explore Plants'),
         ),
@@ -449,6 +609,7 @@ class _HeroText extends StatelessWidget {
   }
 }
 
+<<<<<<< HEAD
 class _QuickActionButton extends StatelessWidget {
   final IconData icon;
   final String label;
@@ -500,30 +661,43 @@ class _QuickActionButton extends StatelessWidget {
   }
 }
 
+=======
+>>>>>>> origin/main
 class _SummaryCard extends StatelessWidget {
   final IconData icon;
   final String title;
   final String value;
+<<<<<<< HEAD
   final Color? iconColor;
   final Color? valueColor;
   final VoidCallback? onTap;
+=======
+>>>>>>> origin/main
 
   const _SummaryCard({
     required this.icon,
     required this.title,
     required this.value,
+<<<<<<< HEAD
     this.iconColor,
     this.valueColor,
     this.onTap,
+=======
+>>>>>>> origin/main
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
+<<<<<<< HEAD
+=======
+      padding: const EdgeInsets.all(14),
+>>>>>>> origin/main
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(18),
         border: Border.all(color: Colors.green.shade50),
+<<<<<<< HEAD
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.02),
@@ -564,27 +738,71 @@ class _SummaryCard extends StatelessWidget {
             ),
           ),
         ),
+=======
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(icon, color: AppTheme.primaryGreen, size: 27),
+          const SizedBox(height: 10),
+          Text(
+            title,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(fontWeight: FontWeight.w600),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            value,
+            style: const TextStyle(
+              color: AppTheme.primaryGreen,
+              fontSize: 13,
+            ),
+          ),
+        ],
+>>>>>>> origin/main
       ),
     );
   }
 }
 
+<<<<<<< HEAD
 class _PopularPlantCard extends StatelessWidget {
   final Plant plant;
   final VoidCallback onTap;
 
   const _PopularPlantCard({required this.plant, required this.onTap});
+=======
+class _PopularPlant extends StatelessWidget {
+  final String emoji;
+  final String name;
+  final String subtitle;
+
+  const _PopularPlant({
+    required this.emoji,
+    required this.name,
+    required this.subtitle,
+  });
+>>>>>>> origin/main
 
   @override
   Widget build(BuildContext context) {
     return Container(
+<<<<<<< HEAD
       width: 155,
       margin: const EdgeInsets.only(right: 12),
+=======
+      width: 145,
+      margin: const EdgeInsets.only(right: 12),
+      padding: const EdgeInsets.all(14),
+>>>>>>> origin/main
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: Colors.green.shade50),
       ),
+<<<<<<< HEAD
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: onTap,
@@ -673,3 +891,27 @@ class _PopularPlantCard extends StatelessWidget {
     );
   }
 }
+=======
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(emoji, style: const TextStyle(fontSize: 42)),
+          const Spacer(),
+          Text(
+            name,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 15,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            subtitle,
+            style: const TextStyle(color: Colors.black54, fontSize: 12),
+          ),
+        ],
+      ),
+    );
+  }
+}
+>>>>>>> origin/main

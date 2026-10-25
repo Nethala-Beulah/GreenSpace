@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import '../models/plant.dart';
 import '../services/garden_state.dart';
 import '../theme/app_theme.dart';
@@ -6,6 +7,11 @@ import '../widgets/care_info_card.dart';
 
 class PlantDetailsScreen extends StatelessWidget {
   final Plant? plant;
+=======
+import '../theme/app_theme.dart';
+
+class PlantDetailsScreen extends StatelessWidget {
+>>>>>>> origin/main
   final String name;
   final String category;
   final String imageUrl;
@@ -14,16 +20,25 @@ class PlantDetailsScreen extends StatelessWidget {
 
   const PlantDetailsScreen({
     super.key,
+<<<<<<< HEAD
     this.plant,
     this.name = '',
     this.category = 'Indoor',
     this.imageUrl = '',
     this.sunlight = 'Indirect light',
     this.watering = 'Moderate',
+=======
+    required this.name,
+    required this.category,
+    required this.imageUrl,
+    required this.sunlight,
+    required this.watering,
+>>>>>>> origin/main
   });
 
   @override
   Widget build(BuildContext context) {
+<<<<<<< HEAD
     final gardenState = GardenStateScope.maybeOf(context);
 
     // Resolve effective plant object
@@ -68,10 +83,13 @@ class PlantDetailsScreen extends StatelessWidget {
     final isInGarden = gardenState?.isInGarden(effectivePlant.id) ?? false;
     final gardenEntry = gardenState?.getGardenEntry(effectivePlant.id);
 
+=======
+>>>>>>> origin/main
     return Scaffold(
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
+<<<<<<< HEAD
             expandedHeight: 320,
             pinned: true,
             backgroundColor: AppTheme.background,
@@ -107,16 +125,32 @@ class PlantDetailsScreen extends StatelessWidget {
                 effectivePlant.imageUrl.isNotEmpty
                     ? effectivePlant.imageUrl
                     : imageUrl,
+=======
+            expandedHeight: 300,
+            pinned: true,
+            backgroundColor: AppTheme.background,
+            foregroundColor: AppTheme.darkGreen,
+            flexibleSpace: FlexibleSpaceBar(
+              background: Image.network(
+                imageUrl,
+>>>>>>> origin/main
                 fit: BoxFit.cover,
                 errorBuilder: (context, error, stackTrace) {
                   return Container(
                     color: AppTheme.lightGreen,
+<<<<<<< HEAD
                     child: const Center(
                       child: Icon(
                         Icons.local_florist,
                         size: 90,
                         color: AppTheme.primaryGreen,
                       ),
+=======
+                    child: const Icon(
+                      Icons.local_florist,
+                      size: 100,
+                      color: AppTheme.primaryGreen,
+>>>>>>> origin/main
                     ),
                   );
                 },
@@ -128,6 +162,7 @@ class PlantDetailsScreen extends StatelessWidget {
               child: ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 800),
                 child: Padding(
+<<<<<<< HEAD
                   padding: const EdgeInsets.symmetric(
                     horizontal: 20,
                     vertical: 24,
@@ -405,6 +440,73 @@ class PlantDetailsScreen extends StatelessWidget {
                       const SizedBox(height: 18),
 
                       // Gardening Tip Box
+=======
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 6,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppTheme.lightGreen,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Text(
+                          category,
+                          style: const TextStyle(
+                            color: AppTheme.primaryGreen,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      Text(
+                        name,
+                        style: const TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                          color: AppTheme.darkGreen,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      const Text(
+                        'Bring more greenery into your space!',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.black54,
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+
+                      const Text(
+                        'Care Guide',
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: AppTheme.darkGreen,
+                        ),
+                      ),
+                      const SizedBox(height: 14),
+
+                      _CareCard(
+                        icon: Icons.wb_sunny_outlined,
+                        title: 'Sunlight',
+                        description: sunlight,
+                        color: Colors.orange,
+                      ),
+                      const SizedBox(height: 12),
+                      _CareCard(
+                        icon: Icons.water_drop_outlined,
+                        title: 'Watering',
+                        description: watering,
+                        color: Colors.blue,
+                      ),
+                      const SizedBox(height: 24),
+
+>>>>>>> origin/main
                       Container(
                         width: double.infinity,
                         padding: const EdgeInsets.all(18),
@@ -412,6 +514,7 @@ class PlantDetailsScreen extends StatelessWidget {
                           color: AppTheme.lightGreen,
                           borderRadius: BorderRadius.circular(18),
                         ),
+<<<<<<< HEAD
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -423,12 +526,29 @@ class PlantDetailsScreen extends StatelessWidget {
                                   'Pro Gardening Tip',
                                   style: TextStyle(
                                     fontSize: 16,
+=======
+                        child: const Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.eco,
+                                  color: AppTheme.primaryGreen,
+                                ),
+                                SizedBox(width: 8),
+                                Text(
+                                  'Gardening Tip',
+                                  style: TextStyle(
+                                    fontSize: 18,
+>>>>>>> origin/main
                                     fontWeight: FontWeight.bold,
                                     color: AppTheme.darkGreen,
                                   ),
                                 ),
                               ],
                             ),
+<<<<<<< HEAD
                             const SizedBox(height: 8),
                             Text(
                               effectivePlant.gardeningTip,
@@ -437,17 +557,31 @@ class PlantDetailsScreen extends StatelessWidget {
                                 height: 1.5,
                                 color: AppTheme.textColor,
                               ),
+=======
+                            SizedBox(height: 10),
+                            Text(
+                              'Check the soil before watering. '
+                              'Different plants need different amounts '
+                              'of water, so avoid overwatering.',
+                              style: TextStyle(fontSize: 15, height: 1.5),
+>>>>>>> origin/main
                             ),
                           ],
                         ),
                       ),
+<<<<<<< HEAD
                       const SizedBox(height: 28),
 
                       // Action Button: Add to garden / Manage garden
+=======
+                      const SizedBox(height: 24),
+
+>>>>>>> origin/main
                       SizedBox(
                         width: double.infinity,
                         child: FilledButton.icon(
                           onPressed: () {
+<<<<<<< HEAD
                             if (gardenState == null) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
@@ -494,11 +628,28 @@ class PlantDetailsScreen extends StatelessWidget {
                             padding: const EdgeInsets.symmetric(vertical: 16),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16),
+=======
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('$name added to your garden!'),
+                              ),
+                            );
+                          },
+                          icon: const Icon(Icons.add),
+                          label: const Text('Add to My Garden'),
+                          style: FilledButton.styleFrom(
+                            backgroundColor: AppTheme.primaryGreen,
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 16,
+>>>>>>> origin/main
                             ),
                           ),
                         ),
                       ),
+<<<<<<< HEAD
                       const SizedBox(height: 20),
+=======
+>>>>>>> origin/main
                     ],
                   ),
                 ),
@@ -509,6 +660,7 @@ class PlantDetailsScreen extends StatelessWidget {
       ),
     );
   }
+<<<<<<< HEAD
 
   void _showAddToGardenDialog(
     BuildContext context,
@@ -578,9 +730,60 @@ class PlantDetailsScreen extends StatelessWidget {
               );
             },
             child: const Text('Add to Garden'),
+=======
+}
+
+class _CareCard extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String description;
+  final Color color;
+
+  const _CareCard({
+    required this.icon,
+    required this.title,
+    required this.description,
+    required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Row(
+        children: [
+          CircleAvatar(
+            backgroundColor: color.withValues(alpha: 0.12),
+            child: Icon(icon, color: color),
+          ),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(description),
+              ],
+            ),
+>>>>>>> origin/main
           ),
         ],
       ),
     );
   }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> origin/main

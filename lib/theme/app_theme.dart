@@ -6,11 +6,14 @@ class AppTheme {
   static const Color background = Color(0xFFF7F9F4);
   static const Color darkGreen = Color(0xFF183D2B);
   static const Color textColor = Color(0xFF243329);
+<<<<<<< HEAD
   static const Color mutedText = Color(0xFF6B7280);
   static const Color accentOrange = Color(0xFFE65100);
   static const Color accentBlue = Color(0xFF0277BD);
   static const Color surfaceWhite = Color(0xFFFFFFFF);
   static const Color errorRed = Color(0xFFD32F2F);
+=======
+>>>>>>> origin/main
 
   static ThemeData get lightTheme {
     return ThemeData(
@@ -19,6 +22,7 @@ class AppTheme {
       colorScheme: ColorScheme.fromSeed(
         seedColor: primaryGreen,
         primary: primaryGreen,
+<<<<<<< HEAD
         surface: background,
         onSurface: textColor,
       ),
@@ -78,8 +82,20 @@ class AppTheme {
           ),
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
         ),
+=======
+      ),
+      appBarTheme: const AppBarTheme(
+        backgroundColor: background,
+        foregroundColor: textColor,
+        elevation: 0,
+        centerTitle: false,
+>>>>>>> origin/main
       ),
       fontFamily: 'Roboto',
     );
   }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> origin/main
