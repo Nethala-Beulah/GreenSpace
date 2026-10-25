@@ -1,35 +1,76 @@
 import 'package:flutter/material.dart';
+import '../models/plant.dart';
+import '../services/garden_state.dart';
 import '../theme/app_theme.dart';
 import '../widgets/section_header.dart';
+import 'explore_screen.dart';
+import 'my_garden_screen.dart';
+import 'plant_details_screen.dart';
+import 'plant_scanner_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final gardenState = GardenStateScope.maybeOf(context);
+
+    final totalPlants = gardenState?.totalPlantsInGarden ?? 0;
+    final dueCount = gardenState?.wateringRemindersDueCount ?? 0;
+    final favoritesCount = gardenState?.favoriteIds.length ?? 0;
+
+    // Pick 4 popular plants from catalog for recommendations
+    final popularPlants = (gardenState?.catalog ?? []).take(5).toList();
+
     return Scaffold(
       appBar: AppBar(
         title: const Row(
           children: [
             Icon(Icons.eco, color: AppTheme.primaryGreen, size: 30),
             SizedBox(width: 8),
-            Text(
-              'GreenSpace',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
+            Text('GreenSpace', style: TextStyle(fontWeight: FontWeight.bold)),
           ],
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    dueCount > 0
+                        ? '🌱 Reminder: $dueCount plants need watering today!'
+                        : '🌱 All plants are well cared for!',
+                  ),
+                ),
+              );
+            },
             tooltip: 'Notifications',
-            icon: const Icon(Icons.notifications_none_rounded),
+            icon: Badge(
+              isLabelVisible: dueCount > 0,
+              label: Text('$dueCount'),
+              child: const Icon(Icons.notifications_none_rounded),
+            ),
           ),
-          const Padding(
-            padding: EdgeInsets.only(right: 16),
+          Padding(
+            padding: const EdgeInsets.only(right: 16),
             child: CircleAvatar(
               backgroundColor: AppTheme.lightGreen,
-              child: Icon(Icons.person, color: AppTheme.primaryGreen),
+              child: IconButton(
+                iconSize: 20,
+                tooltip: 'Plant Scanner & ID',
+                icon: const Icon(
+                  Icons.center_focus_strong,
+                  color: AppTheme.primaryGreen,
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const PlantScannerScreen(),
+                    ),
+                  );
+                },
+              ),
             ),
           ),
         ],
@@ -55,55 +96,144 @@ class HomeScreen extends StatelessWidget {
                       color: AppTheme.darkGreen,
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 6),
                   const Text(
                     'Let’s make your space a little greener.',
                     style: TextStyle(fontSize: 15, color: Colors.black54),
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 20),
 
                   // Hero banner
                   Container(
                     padding: const EdgeInsets.all(24),
                     decoration: BoxDecoration(
                       gradient: const LinearGradient(
-                        colors: [
-                          AppTheme.primaryGreen,
-                          AppTheme.darkGreen,
-                        ],
+                        colors: [AppTheme.primaryGreen, AppTheme.darkGreen],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
                       borderRadius: BorderRadius.circular(24),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppTheme.primaryGreen.withValues(alpha: 0.25),
+                          blurRadius: 16,
+                          offset: const Offset(0, 6),
+                        ),
+                      ],
                     ),
                     child: isWide
-                        ? const Row(
+                        ? Row(
                             children: [
-                              Expanded(child: _HeroText()),
-                              SizedBox(width: 20),
-                              Text('🪴', style: TextStyle(fontSize: 90)),
+                              Expanded(
+                                child: _HeroText(
+                                  onExploreTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const ExploreScreen(),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                              const SizedBox(width: 20),
+                              const Text('🪴', style: TextStyle(fontSize: 90)),
                             ],
                           )
-                        : const Column(
+                        : Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('🌿', style: TextStyle(fontSize: 55)),
-                              SizedBox(height: 12),
-                              _HeroText(),
+                              const Text('🌿', style: TextStyle(fontSize: 55)),
+                              const SizedBox(height: 12),
+                              _HeroText(
+                                onExploreTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const ExploreScreen(),
+                                    ),
+                                  );
+                                },
+                              ),
                             ],
                           ),
                   ),
 
-                  const SizedBox(height: 28),
+                  const SizedBox(height: 24),
 
-                  const SectionHeader(title: 'Your Garden'),
+                  // Quick Action Buttons
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _QuickActionButton(
+                          icon: Icons.search,
+                          label: 'Explore',
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const ExploreScreen(),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: _QuickActionButton(
+                          icon: Icons.yard_outlined,
+                          label: 'My Garden',
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const MyGardenScreen(),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: _QuickActionButton(
+                          icon: Icons.center_focus_strong,
+                          label: 'Scan & ID',
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const PlantScannerScreen(),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 24),
+
+                  SectionHeader(
+                    title: 'Your Garden',
+                    actionText: 'Manage',
+                    onActionTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const MyGardenScreen(),
+                        ),
+                      );
+                    },
+                  ),
                   const SizedBox(height: 12),
 
-                  // Summary cards
+                  // Dynamic summary cards
                   LayoutBuilder(
                     builder: (context, cardConstraints) {
-                      final columns =
-                          cardConstraints.maxWidth >= 600 ? 3 : 2;
+                      final columns = cardConstraints.maxWidth >= 600 ? 3 : 2;
 
                       return GridView.count(
                         crossAxisCount: columns,
@@ -112,21 +242,55 @@ class HomeScreen extends StatelessWidget {
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         childAspectRatio: isWide ? 1.8 : 1.25,
-                        children: const [
+                        children: [
                           _SummaryCard(
                             icon: Icons.yard_outlined,
                             title: 'My Plants',
-                            value: '0 plants',
+                            value:
+                                '$totalPlants ${totalPlants == 1 ? "plant" : "plants"}',
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const MyGardenScreen(),
+                                ),
+                              );
+                            },
                           ),
                           _SummaryCard(
                             icon: Icons.water_drop_outlined,
                             title: 'Watering',
-                            value: '0 reminders',
+                            value: dueCount > 0
+                                ? '$dueCount due today!'
+                                : 'All hydrated',
+                            iconColor: dueCount > 0
+                                ? Colors.orange
+                                : Colors.blue,
+                            valueColor: dueCount > 0
+                                ? Colors.orange.shade800
+                                : null,
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const MyGardenScreen(),
+                                ),
+                              );
+                            },
                           ),
                           _SummaryCard(
                             icon: Icons.favorite_border,
-                            title: 'Plant Care',
-                            value: 'Grow daily',
+                            title: 'Favorites',
+                            value: '$favoritesCount saved',
+                            iconColor: Colors.pink,
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const ExploreScreen(),
+                                ),
+                              );
+                            },
                           ),
                         ],
                       );
@@ -137,42 +301,45 @@ class HomeScreen extends StatelessWidget {
 
                   SectionHeader(
                     title: 'Popular Plants',
+                    actionText: 'See all',
                     onActionTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Explore screen coming soon!'),
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ExploreScreen(),
                         ),
                       );
                     },
                   ),
                   const SizedBox(height: 12),
 
+                  // Popular Plants horizontal carousel with real plant data
                   SizedBox(
-                    height: 175,
-                    child: ListView(
+                    height: 180,
+                    child: ListView.builder(
                       scrollDirection: Axis.horizontal,
-                      children: const [
-                        _PopularPlant(
-                          emoji: '🌵',
-                          name: 'Aloe Vera',
-                          subtitle: 'Easy care',
-                        ),
-                        _PopularPlant(
-                          emoji: '🌻',
-                          name: 'Sunflower',
-                          subtitle: 'Loves sunlight',
-                        ),
-                        _PopularPlant(
-                          emoji: '🌿',
-                          name: 'Tulsi',
-                          subtitle: 'Aromatic herb',
-                        ),
-                        _PopularPlant(
-                          emoji: '🌹',
-                          name: 'Rose',
-                          subtitle: 'Flowering plant',
-                        ),
-                      ],
+                      itemCount: popularPlants.length,
+                      itemBuilder: (context, index) {
+                        final plant = popularPlants[index];
+                        return _PopularPlantCard(
+                          plant: plant,
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => PlantDetailsScreen(
+                                  plant: plant,
+                                  name: plant.name,
+                                  category: plant.category,
+                                  imageUrl: plant.imageUrl,
+                                  sunlight: plant.sunlight,
+                                  watering: plant.watering,
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      },
                     ),
                   ),
 
@@ -186,6 +353,7 @@ class HomeScreen extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: AppTheme.lightGreen,
                       borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: Colors.green.shade100),
                     ),
                     child: const Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -201,7 +369,7 @@ class HomeScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Every plant is different!',
+                                'Check the soil moisture first!',
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
@@ -210,9 +378,8 @@ class HomeScreen extends StatelessWidget {
                               ),
                               SizedBox(height: 6),
                               Text(
-                                'Check the soil before watering. Too much '
-                                'water can harm some plants.',
-                                style: TextStyle(height: 1.5),
+                                'Push your finger about 2 inches into the soil. If it feels dry to the touch, your plant is ready for a thorough watering. If damp, wait another day.',
+                                style: TextStyle(height: 1.5, fontSize: 13),
                               ),
                             ],
                           ),
@@ -220,7 +387,7 @@ class HomeScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 28),
                 ],
               ),
             ),
@@ -232,7 +399,9 @@ class HomeScreen extends StatelessWidget {
 }
 
 class _HeroText extends StatelessWidget {
-  const _HeroText();
+  final VoidCallback onExploreTap;
+
+  const _HeroText({required this.onExploreTap});
 
   @override
   Widget build(BuildContext context) {
@@ -265,16 +434,13 @@ class _HeroText extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         FilledButton(
-          onPressed: () {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('We will connect Explore Plants next!'),
-              ),
-            );
-          },
+          onPressed: onExploreTap,
           style: FilledButton.styleFrom(
             backgroundColor: Colors.white,
             foregroundColor: AppTheme.darkGreen,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(14),
+            ),
           ),
           child: const Text('Explore Plants'),
         ),
@@ -283,92 +449,226 @@ class _HeroText extends StatelessWidget {
   }
 }
 
-class _SummaryCard extends StatelessWidget {
+class _QuickActionButton extends StatelessWidget {
   final IconData icon;
-  final String title;
-  final String value;
+  final String label;
+  final VoidCallback onTap;
 
-  const _SummaryCard({
+  const _QuickActionButton({
     required this.icon,
-    required this.title,
-    required this.value,
+    required this.label,
+    required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: Colors.green.shade50),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(icon, color: AppTheme.primaryGreen, size: 27),
-          const SizedBox(height: 10),
-          Text(
-            title,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: const TextStyle(fontWeight: FontWeight.w600),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            value,
-            style: const TextStyle(
-              color: AppTheme.primaryGreen,
-              fontSize: 13,
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: Colors.green.shade50),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.02),
+              blurRadius: 6,
+              offset: const Offset(0, 2),
             ),
-          ),
-        ],
+          ],
+        ),
+        child: Column(
+          children: [
+            Icon(icon, color: AppTheme.primaryGreen, size: 24),
+            const SizedBox(height: 6),
+            Text(
+              label,
+              style: const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+                color: AppTheme.darkGreen,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
-class _PopularPlant extends StatelessWidget {
-  final String emoji;
-  final String name;
-  final String subtitle;
+class _SummaryCard extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String value;
+  final Color? iconColor;
+  final Color? valueColor;
+  final VoidCallback? onTap;
 
-  const _PopularPlant({
-    required this.emoji,
-    required this.name,
-    required this.subtitle,
+  const _SummaryCard({
+    required this.icon,
+    required this.title,
+    required this.value,
+    this.iconColor,
+    this.valueColor,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 145,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: Colors.green.shade50),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.02),
+            blurRadius: 6,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(18),
+          child: Padding(
+            padding: const EdgeInsets.all(14),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(icon, color: iconColor ?? AppTheme.primaryGreen, size: 27),
+                const SizedBox(height: 10),
+                Text(
+                  title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(fontWeight: FontWeight.w600),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  value,
+                  style: TextStyle(
+                    color: valueColor ?? AppTheme.primaryGreen,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 13,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _PopularPlantCard extends StatelessWidget {
+  final Plant plant;
+  final VoidCallback onTap;
+
+  const _PopularPlantCard({required this.plant, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 155,
       margin: const EdgeInsets.only(right: 12),
-      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: Colors.green.shade50),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(emoji, style: const TextStyle(fontSize: 42)),
-          const Spacer(),
-          Text(
-            name,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 15,
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: onTap,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              flex: 5,
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  Image.network(
+                    plant.imageUrl,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) => Container(
+                      color: AppTheme.lightGreen,
+                      child: const Center(
+                        child: Icon(
+                          Icons.local_florist,
+                          color: AppTheme.primaryGreen,
+                          size: 36,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    top: 6,
+                    left: 6,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6,
+                        vertical: 2,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.9),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Text(
+                        plant.category,
+                        style: const TextStyle(
+                          fontSize: 9,
+                          fontWeight: FontWeight.bold,
+                          color: AppTheme.primaryGreen,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            subtitle,
-            style: const TextStyle(color: Colors.black54, fontSize: 12),
-          ),
-        ],
+            Expanded(
+              flex: 4,
+              child: Padding(
+                padding: const EdgeInsets.all(10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      plant.name,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 13,
+                        color: AppTheme.darkGreen,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      plant.watering,
+                      style: const TextStyle(
+                        color: Colors.black54,
+                        fontSize: 11,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
